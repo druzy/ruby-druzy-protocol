@@ -1,4 +1,5 @@
 require 'druzy/protocol/version'
+require 'druzy/protocol/device'
 
 module Druzy
   module Protocol
@@ -6,12 +7,14 @@ module Druzy
     class Discoverer
       @@discoverers=[]
       @@plugin_dir=File.dirname(__FILE__)+'/protocol/plugin/'
+      #@@plugin_dir="/usr/lib/ruby/vendor_ruby/druzy"+"/protocol/plugin/"
       
       def self.get_discoverers
         Dir[File.join(@@plugin_dir, '*.rb')].each {|file| require "druzy/protocol/plugin/"+File.basename(file,"*.rb")}
+        return @@discoverers         
       end
       
-      def inherited(klass)
+      def self.inherited(klass)
         @@discoverers << klass.new
       end
       
@@ -19,7 +22,7 @@ module Druzy
         return []
       end
       
-      def start_discoverer(delay=10, identifier=nil, &discovery_listener)
+      def start_discoverer(delay=10, identifier=nil)
       end
       
       def stop_discoverer
@@ -28,6 +31,6 @@ module Druzy
       def restart_discoverer
       end
     end
-    
+ 
   end
 end
