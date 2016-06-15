@@ -10,6 +10,14 @@ module Druzy
         @name=name
         @icon=icon
       end
+      
+      def ==(o)
+        if !o.is_a? Device
+          return false
+        else
+          return @identifier==o.identifier
+        end
+      end
     end
     
     class Renderer < Device
