@@ -14,10 +14,12 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/druzy/ruby-druzy-protocol"
   spec.license       = "MIT"
 
-  spec.files         = Dir['lib/druzy/*.rb']+Dir['lib/druzy/protocol/*.rb']
+  spec.files         = `find lib -type f`.split("\n")
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_runtime_dependency "druzy-mvc", ">= 1.2.0"
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
