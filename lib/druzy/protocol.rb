@@ -1,5 +1,5 @@
-require 'druzy/protocol/version'
-require 'druzy/protocol/device'
+require_relative 'protocol/version'
+require_relative 'protocol/device'
 
 module Druzy
   module Protocol

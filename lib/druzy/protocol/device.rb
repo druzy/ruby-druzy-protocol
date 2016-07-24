@@ -29,13 +29,35 @@ module Druzy
       
       def initialize(identifier, protocol, name, icon, duration=Time.at(0).utc, time_position=Time.at(0).utc,volume=100,volume_min=0,volume_max=100,mute=false)
         super(identifier,protocol,name,icon)
-        @duration=duration
-        @time_position=time_position
-        @volume=volume
-        @volume_min=volume_min
-        @volume_max=volume_max
-        @mute=mute
-        @current_file
+        @duration = duration
+        @time_position = time_position
+        @volume = volume
+        @volume_min = volume_min
+        @volume_max = volume_max
+        @mute = mute
+        @current_file = nil
+        @play = false
+        @pause = false
+        @stop = true
+        
+        add_property_change_listener(Druzy::MVC::PropertyChangeListener.new do |event|
+          if event.property_name == "play"
+            if event.new_value == true
+              stop = false
+              pause = false
+            end
+          elsif event.property_name == "pause"
+            if event.new_value == true
+              pause = false
+              stop = false
+            end
+          elsif event.property_name == "stop"
+            if event.new_value == true
+              play = false
+              pause = false
+            end
+          end
+        end)
       end
       
       def duration=(duration)
@@ -71,6 +93,21 @@ module Druzy
       def current_file=(current_file)
         @current_file, old = current_file, @current_file
         fire_property_change(Druzy::MVC::PropertyChangeEvent.new(self,"current_file",old,@current_file))
+      end
+      
+      def play=(play)
+        @play, old = play, @play
+        fire_property_change(Druzy::MVC::PropertyChangeEvent.new(self,"play",old,@play))
+      end
+      
+      def pause=(pause)
+        @pause, old = pause, @pause
+        fire_property_change(Druzy::MVC::PropertyChangeEvent.new(self,"pause",old,@pause))
+      end
+      
+      def stop=(stop)
+        @stop, old = stop, @stop
+        fire_property_change(Druzy::MVC::PropertyChangeEvent.new(self,"stop",old,@stop))
       end
       
       def play
